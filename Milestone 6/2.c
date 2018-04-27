@@ -9,19 +9,40 @@ char **str_split(char *str, char c)
   char **tokens = NULL;
   int count = 0;
   while(*str){
+    // skip the delimiter if it's present at the beginning of the string
     while(*str == c)
       ++str;
+    //check if the string exists after skiping the delimiter
     if(!*str)
       break;
+    /*
+      Here we're creating array of pointers
+      realloc() creates a location of 4 bytes to store address and assigns the pointer to tokens
+      now tokens points to the newly created location, which will store address of string(token)
+    */
     tokens = realloc(tokens, (count+1) * sizeof(*tokens));
-      tokens[count++] = str;
+    /*
+      str is a pointer it holds address of the beginning of the string
+      note down that address where the token string begins
+    */
+    tokens[count++] = str;
+    //find the position of the delimiter
     while(*str && *str != c)
       ++str;
+    /*
+      replace the delimiter with NULL
+      NULL terminated series of characters is a string
+      now one token is created
+    */
     if(*str)
       *str++ = 0;
   }
-  tokens = realloc(tokens, (count+1) * sizeof(*tokens));
-  tokens[count] = NULL;
+  /*
+    when all the tokens are created
+    assign NULL to the end of the array, so that we'll know array of tokens end here
+  */
+  tokens = realloc(tokens, (count+1) * sizeof(*tokens)); //create last address location for token
+  tokens[count] = NULL; //points to NULL i.e. end of the tokens array.
   return tokens;
 }
 
